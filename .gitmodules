@@ -1,12 +1,3 @@
-[submodule "AutoMaid-ML"]
-	path = AutoMaid-ML
-	url = https://github.com/sadman-showmik/AutoMaid-ML.git
 [submodule "AutoMaid-Hardware"]
 	path = AutoMaid-Hardware
 	url = https://github.com/sadman-showmik/AutoMaid-Hardware.git
-[submodule "AutoMaid-Network"]
-	path = AutoMaid-Network
-	url = https://github.com/sadman-showmik/AutoMaid-Network.git
-[submodule "AutoMaid-Frontend"]
-	path = AutoMaid-Frontend
-	url = https://github.com/sadman-showmik/AutoMaid-Frontend.git
