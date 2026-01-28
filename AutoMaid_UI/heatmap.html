@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AutoMaid · Room Heatmap Cards</title>
+
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+header {
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+section {
+  padding: 28px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .cards { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .cards { grid-template-columns: 1fr; }
+}
+
+.room-card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+
+.room-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.12);
+}
+
+.room-title {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.heatmap {
+  position: relative;
+}
+
+.cell {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+}
+
+/* Tooltip */
+#tooltip {
+  position: fixed;
+  background: rgba(0,0,0,0.85);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: pre-line;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .15s ease;
+  z-index: 9999;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>AutoMaid · Room Cleanliness</h1>
+</header>
+
+<section>
+  <div class="cards" id="cards"></div>
+</section>
+
+<div id="tooltip"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+const roomData = [
+  {
+    name: "Living Room",
+    cleanliness: 88,
+    rows: 42,
+    cols: 72,
+    link: "living-room.html",
+    sensors: {
+      Dust: "15 µg/m³",
+      Air: "Good",
+      Gas: "Normal",
+      Temp: "23°C",
+      Humidity: "45%"
+    }
+  },
+  {
+    name: "Bedroom",
+    cleanliness: 75,
+    rows: 36,
+    cols: 54,
+    link: "bedroom.html",
+    sensors: {
+      Dust: "25 µg/m³",
+      Air: "Moderate",
+      Gas: "Low",
+      Temp: "21°C",
+      Humidity: "50%"
+    }
+  },
+  {
+    name: "Kitchen",
+    cleanliness: 63,
+    rows: 30,
+    cols: 48,
+    link: "kitchen.html",
+    sensors: {
+      Dust: "30 µg/m³",
+      Air: "Poor",
+      Gas: "High",
+      Temp: "25°C",
+      Humidity: "55%"
+    }
+  },
+  {
+    name: "Bathroom",
+    cleanliness: 82,
+    rows: 18,
+    cols: 30,
+    link: "bathroom.html",
+    sensors: {
+      Dust: "10 µg/m³",
+      Air: "Good",
+      Gas: "Normal",
+      Temp: "24°C",
+      Humidity: "60%"
+    }
+  },
+  {
+    name: "Study Room",
+    cleanliness: 92,
+    rows: 27,
+    cols: 42,
+    link: "study-room.html",
+    sensors: {
+      Dust: "12 µg/m³",
+      Air: "Good",
+      Gas: "Low",
+      Temp: "22°C",
+      Humidity: "48%"
+    }
+  },
+  {
+    name: "Sauna",
+    cleanliness: 70,
+    rows: 18,
+    cols: 36,
+    link: "sauna.html",
+    sensors: {
+      Dust: "8 µg/m³",
+      Air: "Good",
+      Gas: "Low",
+      Temp: "70°C",
+      Humidity: "45%"
+    }
+  }
+];
+
+
+const cards = document.getElementById("cards");
+const tooltip = document.getElementById("tooltip");
+const cellSize = 6;
+const gap = 1;
+
+function moveTooltip(e) {
+  tooltip.style.left = e.clientX + 14 + "px";
+  tooltip.style.top = e.clientY + 14 + "px";
+}
+
+roomData.forEach(room => {
+  const card = document.createElement("a");
+  card.className = "room-card";
+  card.href = room.link;
+
+  const title = document.createElement("div");
+  title.className = "room-title";
+  title.textContent = `${room.name} · ${room.cleanliness}%`;
+  card.appendChild(title);
+
+  const heatmap = document.createElement("div");
+  heatmap.className = "heatmap";
+  heatmap.style.width = room.cols * (cellSize + gap) + "px";
+  heatmap.style.height = room.rows * (cellSize + gap) + "px";
+
+  for (let r=0;r<room.rows;r++){
+    for (let c=0;c<room.cols;c++){
+      const cell=document.createElement("div");
+      cell.className="cell";
+      cell.style.top=r*(cellSize+gap)+"px";
+      cell.style.left=c*(cellSize+gap)+"px";
+
+      const rand=Math.random()*100;
+      cell.style.background =
+        rand<25?"red":rand<50?"orange":rand<75?"yellow":"green";
+
+      heatmap.appendChild(cell);
+    }
+  }
+
+  card.appendChild(heatmap);
+
+  const tooltipText = Object.entries(room.sensors)
+    .map(([k,v])=>`${k}: ${v}`).join("\n");
+
+  card.addEventListener("mouseenter", e=>{
+    tooltip.textContent = tooltipText;
+    tooltip.style.opacity = 1;
+    moveTooltip(e);
+  });
+
+  card.addEventListener("mousemove", moveTooltip);
+  card.addEventListener("mouseleave", ()=>tooltip.style.opacity=0);
+
+  card.addEventListener("touchstart", e=>{
+    e.preventDefault();
+    tooltip.textContent = tooltipText;
+    tooltip.style.opacity = 1;
+    moveTooltip(e.touches[0]);
+  });
+
+  card.addEventListener("touchend", ()=>tooltip.style.opacity=0);
+
+  cards.appendChild(card);
+});
+});
+</script>
+
+</body>
+</html>

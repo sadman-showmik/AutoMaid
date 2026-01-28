@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Alerts – AutoMaid</title>
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --card-unread: #d1fae5;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+header h1 { margin: 0; font-size: 22px; }
+header img { height: 48px; }
+
+section { padding: 28px; }
+
+/* LIST LAYOUT */
+.alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  background: var(--card);
+  padding: 14px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+.card.unread {
+  background: var(--card-unread);
+}
+
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card p { margin: 2px 0; font-size: 13px; color: var(--text-muted); }
+.card .big { font-size: 18px; font-weight: 700; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AutoMaid Resolved Issues</h1>
+  <img src="logo.png" alt="AutoMaid Logo">
+</header>
+
+<section>
+<div class="alert-list" id="alertContainer">
+  <!-- Alert cards will be injected here -->
+</div>
+</section>
+
+<script>
+// Simulated alerts
+const devices = ["Vacuum", "Mop", "Air Filter", "Sensor Hub"];
+const types = ["Maintenance Required", "Filter Replacement", "Dust Alert", "Gas Alert", "Temperature Alert", "Humidity Alert"];
+const alertContainer = document.getElementById('alertContainer');
+
+let alerts = [];
+
+// Create 100 alerts with random date
+for(let i=1; i<=105; i++){
+  const device = devices[Math.floor(Math.random()*devices.length)];
+  const type = types[Math.floor(Math.random()*types.length)];
+  const severity = Math.random()<0.3?"High":"Normal";
+  const date = new Date(2026, 0, Math.floor(Math.random()*20)+1); // Jan 1-20, 2026
+  alerts.push({device, type, severity, date});
+}
+
+// Sort by date descending (newest first)
+alerts.sort((a,b) => b.date - a.date);
+
+// Render alerts
+alerts.forEach((alert, index)=>{
+  const formattedDate = alert.date.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
+  const card = document.createElement('div');
+  card.className = 'card';
+  if(index===0) card.classList.add('unread'); // newest alert unread
+  card.innerHTML = `
+    <h3>${alert.type}</h3>
+    <p><strong>Device:</strong> ${alert.device}</p>
+    <p><strong>Date:</strong> ${formattedDate}</p>
+    <p><strong>Severity:</strong> ${alert.severity}</p>
+  `;
+  alertContainer.appendChild(card);
+});
+</script>
+
+</body>
+</html>

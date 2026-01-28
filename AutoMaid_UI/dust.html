@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dust Levels – AutoMaid</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+header img {
+  height: 48px;
+}
+
+section {
+  padding: 28px;
+}
+
+/* SUMMARY CARDS */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: var(--card);
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.card h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.card .big {
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.card p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* CHART CONTAINER */
+.chart-container {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  margin-bottom: 30px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Dust Presence</h1>
+  <img src="logo.png" alt="AutoMaid Logo">
+</header>
+
+<section>
+
+  <!-- SUMMARY CARDS -->
+  <div class="cards">
+    <div class="card">
+      <h3>Average Dust</h3>
+      <div class="big">14 µg/m³</div>
+      <p>Past 30 days</p>
+    </div>
+    <div class="card">
+      <h3>Highest Dust Level</h3>
+      <div class="big">28 µg/m³</div>
+      <p>Recorded in last month</p>
+    </div>
+    <div class="card">
+      <h3>Below Threshold Days</h3>
+      <div class="big">23</div>
+      <p>Days within healthy range</p>
+    </div>
+  </div>
+
+  <!-- BAR CHART -->
+  <div class="chart-container">
+    <canvas id="dustChart" height="120"></canvas>
+  </div>
+
+  <!-- SEASONAL DUST CHART -->
+  <div class="chart-container">
+    <canvas id="seasonDustChart" height="120"></canvas>
+  </div>
+
+</section>
+
+<script>
+const ctx = document.getElementById('dustChart').getContext('2d');
+
+// Generate realistic fake dust data for 30 days
+const days = Array.from({length:30}, (_,i)=>`Day ${i+1}`);
+const dustLevels = Array.from({length:30}, ()=> Math.floor(Math.random() * 25 + 5)); // 5-30 µg/m³
+
+const dustChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: days,
+    datasets: [
+      {
+        label: 'Dust (µg/m³)',
+        data: dustLevels,
+        backgroundColor: 'rgba(74, 222, 128, 0.7)',
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Dust Presence - Last 30 Days'
+      }
+    },
+    scales: {
+      y: { beginAtZero: true }
+    }
+  }
+});
+
+// ----------------------
+// SEASONAL DUST CHART
+// ----------------------
+const seasonCtx = document.getElementById('seasonDustChart').getContext('2d');
+const seasons = ["Winter", "Spring", "Summer", "Autumn"];
+// Realistic indoor dust averages (µg/m³)
+const seasonalDust = [22, 14, 10, 16];
+
+new Chart(seasonCtx, {
+  type: 'bar',
+  data: {
+    labels: seasons,
+    datasets: [{
+      label: "Indoor Dust (µg/m³)",
+      data: seasonalDust,
+      backgroundColor: 'rgba(20,184,166,0.7)',
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Seasonal Indoor Dust Levels'
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        suggestedMax: 30
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AutoMaid Maintenance – Smart Home</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+header h1 { margin: 0; font-size: 22px; }
+header img { height: 48px; }
+
+section { padding: 28px; }
+h2 { margin-bottom: 16px; }
+
+/* GRID */
+.maintenance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card p { margin: 2px 0; font-size: 13px; color: var(--text-muted); }
+.card .big { font-size: 20px; font-weight: 700; margin-top: 4px; }
+
+.chart-container {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AutoMaid Maintenance</h1>
+  <img src="logo.png" alt="AutoMaid Logo">
+</header>
+
+<section>
+<h2>Device & Sensor Health</h2>
+<div class="maintenance-grid" id="maintenanceGrid">
+  <!-- Maintenance cards will go here -->
+</div>
+
+<h2>Maintenance Prediction</h2>
+<div class="chart-container">
+  <canvas id="healthChart"></canvas>
+</div>
+<div class="chart-container">
+  <canvas id="maintenanceForecast"></canvas>
+</div>
+
+</section>
+
+<script>
+// Devices and sensors including sauna devices
+const devices = [
+  {name:"Central Vacuum", type:"Device", health:92, lastService:"2025-12-15"},
+  {name:"Mop Robo X200", type:"Device", health:88, lastService:"2025-12-10"},
+  {name:"Air Purifier IQ500", type:"Device", health:95, lastService:"2025-12-20"},
+  {name:"Temp Sensor Bedroom", type:"Sensor", health:100, lastService:"2025-12-01"},
+  {name:"Humidity Sensor Kitchen", type:"Sensor", health:98, lastService:"2025-12-05"},
+  {name:"CO2 Sensor Study", type:"Sensor", health:97, lastService:"2025-12-07"},
+  {name:"AutoMaid IoT Core", type:"System", health:96, lastService:"2025-12-01"},
+  
+  // Sauna devices
+  {name:"Sauna Temp Controller", type:"Device", health:95, lastService:"2025-12-12"},
+  {name:"Sauna Humidity Sensor", type:"Sensor", health:92, lastService:"2025-12-15"},
+  {name:"Sauna Fan", type:"Device", health:88, lastService:"2025-12-18"},
+  {name:"Sauna Lighting", type:"Device", health:90, lastService:"2025-12-20"}
+];
+
+// Render maintenance cards
+const maintenanceGrid = document.getElementById('maintenanceGrid');
+devices.forEach(d => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <h3>${d.name}</h3>
+    <p><strong>Type:</strong> ${d.type}</p>
+    <p><strong>Health:</strong> ${d.health}%</p>
+    <p><strong>Last Service:</strong> ${d.lastService}</p>
+  `;
+  maintenanceGrid.appendChild(card);
+});
+
+// Chart 1: Current health of all devices/sensors
+const ctx1 = document.getElementById('healthChart').getContext('2d');
+new Chart(ctx1, {
+  type: 'bar',
+  data: {
+    labels: devices.map(d => d.name),
+    datasets: [{
+      label: 'Health (%)',
+      data: devices.map(d => d.health),
+      backgroundColor: devices.map(d => d.health>90 ? 'rgba(74,222,128,0.7)' : 'rgba(251,191,36,0.7)'),
+    }]
+  },
+  options: {
+    responsive:true,
+    scales:{ y:{ min:0, max:100 } }
+  }
+});
+
+// Chart 2: Predicted maintenance requirement in next 30 days
+const forecastLabels = [];
+const today = new Date("2026-01-21");
+for(let i=0;i<30;i++){
+  const d = new Date(today); 
+  d.setDate(today.getDate()+i);
+  forecastLabels.push(d.toISOString().split('T')[0]);
+}
+
+const maintenanceForecastData = forecastLabels.map((date,idx)=>{
+  return Math.round(Math.random()*30 + 70); // 70-100% simulated
+});
+
+const ctx2 = document.getElementById('maintenanceForecast').getContext('2d');
+new Chart(ctx2, {
+  type: 'line',
+  data: {
+    labels: forecastLabels,
+    datasets: [{
+      label:'Maintenance Health Forecast (%)',
+      data: maintenanceForecastData,
+      borderColor:'rgba(20,184,166,1)',
+      backgroundColor:'rgba(20,184,166,0.3)',
+      fill:true,
+      tension:0.3
+    }]
+  },
+  options:{
+    responsive:true,
+    scales:{ y:{ min:0, max:100 } }
+  }
+});
+</script>
+
+</body>
+</html>

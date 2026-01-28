@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Water Saved – AutoMaid</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+header h1 { margin: 0; font-size: 22px; }
+header img { height: 48px; }
+
+section { padding: 28px; }
+
+/* SUMMARY CARDS */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: var(--card);
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card .big { font-size: 28px; font-weight: 700; margin-top: 4px; }
+.card p { font-size: 13px; color: var(--text-muted); }
+
+/* CHART GRID */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.chart-container {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Water Saved</h1>
+  <img src="logo.png" alt="AutoMaid Logo">
+</header>
+
+<section>
+
+  <!-- SUMMARY CARDS -->
+  <div class="cards">
+    <div class="card">
+      <h3>Current Month</h3>
+      <div class="big">+12%</div>
+      <p>Compared to last month</p>
+    </div>
+    <div class="card">
+      <h3>Year-to-Date</h3>
+      <div class="big">+20%</div>
+      <p>Compared to last year</p>
+    </div>
+  </div>
+
+  <!-- CHART GRID -->
+  <div class="chart-grid">
+    <div class="chart-container">
+      <canvas id="monthlyWaterChart" height="120"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="yearlyWaterChart" height="120"></canvas>
+    </div>
+  </div>
+
+</section>
+
+<script>
+// Past month water saved (last 12 months + predicted)
+const months = ["Feb 2025","Mar 2025","Apr 2025","May 2025","Jun 2025","Jul 2025","Aug 2025","Sep 2025","Oct 2025","Nov 2025","Dec 2025","Jan 2026","Predicted Feb 2026"];
+const monthWater = [3, 5, 4, 6, 8, 10, 9, 11, 12, 10, 13, 12, 14]; // last entry predicted
+const monthWaterColors = monthWater.map((_,i) => i===12 ? 'rgba(20,184,166,0.5)' : 'rgba(74,222,128,0.7)'); // predicted lighter
+
+// Yearly comparison (Jan 2025 vs Jan 2026)
+const years = ["Jan 2025","Jan 2026"];
+const yearWater = [0, 20]; // percentage improvement
+
+// Monthly chart with prediction
+new Chart(document.getElementById('monthlyWaterChart'), {
+  type: 'bar',
+  data: {
+    labels: months,
+    datasets: [{
+      label: 'Water Saved %',
+      data: monthWater,
+      backgroundColor: monthWaterColors,
+      borderColor: 'rgba(74,222,128,1)',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: { y: { beginAtZero: true, max: 40 } },
+    plugins: {
+      title: { display: true, text: 'Monthly Water Saved (Last 12 Months + Prediction)' },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            if(context.dataIndex === 12) return context.dataset.data[12] + '% (Predicted)';
+            return context.dataset.data[context.dataIndex] + '%';
+          }
+        }
+      }
+    }
+  }
+});
+
+// Yearly chart
+new Chart(document.getElementById('yearlyWaterChart'), {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [{
+      label: 'Water Saved %',
+      data: yearWater,
+      backgroundColor: 'rgba(20,184,166,0.7)',
+      borderColor: 'rgba(20,184,166,1)',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: { y: { beginAtZero: true, max: 50 } },
+    plugins: { title: { display: true, text: 'Yearly Water Saved Comparison' } }
+  }
+});
+</script>
+
+</body>
+</html>

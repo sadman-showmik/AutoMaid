@@ -1,0 +1,682 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8" /> 
+<title>AutoMaid – Effortless and self-learning cleaning management system</title> 
+<style> 
+:root { 
+    --teal: #0f766e; 
+    --teal-soft: #14b8a6; 
+    --eco: #4ade80; 
+    --bg: #f4fafa; 
+    --card: #ffffff; 
+    --text-dark: #0f172a; 
+    --text-muted: #64748b; 
+} 
+* { 
+    box-sizing: border-box; 
+    font-family: "Segoe UI", system-ui, sans-serif; 
+} 
+body { 
+    margin: 0; 
+    background: var(--bg); 
+    color: var(--text-dark); 
+} 
+
+/* HEADER */ 
+header { 
+    display: flex; 
+    align-items: center; 
+    gap: 16px; 
+    padding: 20px 28px; 
+    background: linear-gradient(135deg, var(--teal), var(--teal-soft)); 
+    color: white; 
+} 
+header img { 
+    height: 96px; 
+} 
+header h1 { 
+    font-size: 48px; 
+    margin: 0; 
+} 
+header span { 
+    font-size: 18px; 
+    opacity: 0.9; 
+} 
+
+/* GRID */ 
+.dashboard { 
+    padding: 28px; 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+    gap: 20px; 
+} 
+
+/* CARD */ 
+.card { 
+    display: block; 
+    background: var(--card); 
+    border-radius: 16px; 
+    padding: 18px; 
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06); 
+    transition: transform 0.2s ease; 
+    text-decoration: none; 
+    color: inherit; 
+    cursor: pointer; 
+} 
+.card:hover { 
+    transform: translateY(-4px); 
+} 
+.card h3 { 
+    margin: 0 0 6px; 
+    font-size: 16px; 
+} 
+.card p { 
+    margin: 0; 
+    font-size: 13px; 
+    color: var(--text-muted); 
+} 
+
+/* PERCENT BAR */ 
+.bar { 
+    margin-top: 10px; 
+    height: 10px; 
+    background: #e5e7eb; 
+    border-radius: 999px; 
+    overflow: hidden; 
+} 
+.bar > div { 
+    height: 100%; 
+    background: linear-gradient(90deg, var(--eco), var(--teal-soft)); 
+} 
+
+/* BIG NUMBER */ 
+.big { 
+    font-size: 28px; 
+    font-weight: 700; 
+    margin-top: 8px; 
+} 
+
+/* HEATMAP */ 
+.heatmap { 
+    display: grid; 
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 6px; 
+    margin-top: 12px; 
+} 
+.cell { 
+    height: 28px; 
+    border-radius: 6px; 
+} 
+
+/* FOOTER NOTE */ 
+.note { 
+    padding: 20px 28px; 
+    font-size: 12px; 
+    color: var(--text-muted); 
+} 
+
+/* LOGO FIXED BOTTOM-RIGHT */ 
+body::after { 
+    content: ''; 
+    position: fixed; 
+    bottom: 10px; 
+    right: 10px; 
+    width: 80px; 
+    height: 80px; 
+    background: url('logo.png') no-repeat center/contain; 
+    opacity: 0.8; 
+    pointer-events: none; 
+} 
+/* SUMMARY PANEL */
+.summary-panel {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 96px;
+    padding: 44px 56px;
+    background: linear-gradient(135deg, #ecfeff, #f0fdfa);
+    border-bottom: 1px solid #d1fae5;
+    align-items: center;
+}
+
+.summary-main {
+    display: flex;
+    gap: 192px;
+    align-items: center;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-item span {
+    font-size: 28px;
+    color: var(--text-muted);
+}
+
+.summary-item strong {
+    font-size: 72px;
+    font-weight: 600;
+    color: var(--teal);
+    line-height: 1.1;
+}
+
+/* ALERT PANEL */
+.alert-panel {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* TITLE */
+.alert-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+/* ALERT LIST */
+.alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* ALERT CARD */
+.alert-card {
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+/* SEVERITY COLORS */
+.alert-card.critical {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.alert-card.warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.alert-card.info {
+    background: #e0f2fe;
+    color: #075985;
+}
+
+/* SCROLLBAR (SUBTLE) */
+.alert-list::-webkit-scrollbar {
+    width: 6px;
+}
+.alert-list::-webkit-scrollbar-thumb {
+    background: #cbd5f5;
+    border-radius: 10px;
+}
+
+/* DRAGGABLE CARDS */
+.card {
+    cursor: grab;
+    transition: transform 0.3s ease, opacity 0.3s ease; /* smoother movement */
+}
+
+.card.dragging {
+    opacity: 0.6;
+    transform: scale(0.95);
+}
+
+/* Optional: add a placeholder effect */
+.card.placeholder {
+    border: 2px dashed #5eead4;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+</style> 
+</head> 
+<body> 
+<header> 
+<img src="logo.png" alt="AutoMaid Logo"> 
+<div> 
+<h1>AutoMaid</h1> 
+<span>Effortless and self-learning cleaning management system</span> 
+</div> 
+</header> 
+<!-- SUMMARY PANEL -->
+<section class="summary-panel">
+
+  <div class="summary-main">
+    <div class="summary-item">
+      <span>Next Cleaning In</span>
+      <strong>2 days</strong>
+    </div>
+
+    <div class="summary-item">
+      <span>Last Cleaned</span>
+      <strong>Yesterday</strong>
+    </div>
+  </div>
+
+  <!-- ALERT TICKER -->
+<div class="alert-panel">
+  <div class="alert-title">Alerts</div>
+
+  <div class="alert-list">
+    <div class="alert-card critical">
+      Filter replacement due in 3 days
+    </div>
+
+    <div class="alert-card warning">
+      High dust detected in Kitchen specific area
+    </div>
+
+    <div class="alert-card info">
+      Auto-clean scheduled in 2 days
+    </div>
+
+    <div class="alert-card warning">
+      Bathroom humidity above comfort range
+    </div>
+  </div>
+</div>
+
+</section>
+
+<section class="dashboard"> 
+
+<!-- TIME SAVED IMPACT -->
+<a href="impact.html" class="card" id="card-impact" style="grid-column: span 1; background: linear-gradient(135deg, #ffffff, #ecfdf5);">
+  <h3 style="font-size:14px;">Time Saved by AutoMaid current month</h3>
+  <div class="big">26.4 hours</div>
+  <p style="margin-top:12px; font-size:10px;">
+    Cleaning time saved current month through autonomous scheduling,
+    predictive cleaning, and optimized device coordination.
+  </p>
+</a>
+
+<!-- CLEANLINESS STATUS --> 
+<a href="cleanliness.html" class="card" id="card-cleanliness"> 
+  <h3>Cleanliness Status</h3> 
+  <div class="big">82%</div> 
+  <div class="bar"><div style="width:82%"></div></div> 
+  <p>Overall home cleanliness health</p> 
+</a> 
+
+<!-- CLEANING URGENCY --> 
+<a href="cleaning_urgency.html" class="card" id="card-urgency"> 
+  <h3>Cleaning Urgency</h3> 
+  <div class="big">Medium</div> 
+  <div class="bar"><div style="width:56%"></div></div> 
+  <p>Next cleaning recommended in 2 days</p> 
+</a> 
+
+<!-- SCHEDULE --> 
+<a href="schedule.html" class="card" id="card-schedule"> 
+  <h3>Next Week Schedule</h3> 
+  <p>Mon · Thu · Sat</p> 
+  <p>Auto-optimized cleaning</p> 
+</a>
+
+<!-- TEMPERATURE --> 
+<a href="temperature.html" class="card" id="card-temperature"> 
+  <h3>Indoor Temperature</h3> 
+  <div class="big">23.1°C</div> 
+  <p>Outside: −2.4°C</p> 
+</a> 
+
+<!-- HUMIDITY --> 
+<a href="humidity.html" class="card" id="card-humidity"> 
+  <h3>Humidity</h3> 
+  <div class="big">58%</div> 
+  <p>Comfort range maintained</p> 
+</a> 
+
+<!-- DUST --> 
+<a href="dust.html" class="card" id="card-dust"> 
+  <h3>Dust Presence</h3> 
+  <div class="big">12 µg/m³</div> 
+  <div class="bar"><div style="width:32%"></div></div> 
+  <p>Below health threshold</p> 
+</a> 
+
+<!-- AIR QUALITY --> 
+<a href="air_quality.html" class="card" id="card-air"> 
+  <h3>Indoor Air Quality</h3> 
+  <div class="big">Good</div> 
+  <p>Dust: Low · Gas: Normal</p> 
+  <div class="bar"><div style="width:74%"></div></div> 
+</a> 
+
+<!-- GAS --> 
+<a href="gas.html" class="card" id="card-gas"> 
+  <h3>Gas Presence</h3> 
+  <div class="big">Normal</div> 
+  <div class="bar"><div style="width:22%"></div></div> 
+  <p>No abnormal gases detected</p> 
+</a> 
+
+<!-- ENERGY --> 
+<a href="energy.html" class="card" id="card-energy"> 
+  <h3>Energy Efficiency in Cleaning</h3> 
+  <div class="big">+18%</div> 
+  <p>Saved vs last month</p> 
+</a> 
+
+<!-- WATER --> 
+<a href="water.html" class="card" id="card-water"> 
+  <h3>Water Saved for Cleaning</h3> 
+  <div class="big">+12%</div> 
+  <p>Optimized cleaning routines</p> 
+</a>  
+
+<!-- WELLBEING --> 
+<a href="wellbeing.html" class="card" id="card-wellbeing"> 
+  <h3>Measurable Wellbeing Factors</h3> 
+  <p>Based on air, noise, light & routine</p> 
+</a> 
+
+<!-- ALERTS --> 
+<a href="alerts.html" class="card" id="card-alerts"> 
+  <h3>Resolved Alerts</h3> 
+  <div class="big">105</div> 
+  <p>Filter replacement soon</p> 
+</a> 
+
+<!-- DEVICES --> 
+<a href="devices.html" class="card" id="card-devices"> 
+  <h3>Cleaning Devices</h3> 
+  <p>Vacuum · Mop · Air Filter</p> 
+  <p>Status: Healthy</p> 
+</a> 
+
+<!-- SENSORS --> 
+<a href="sensors.html" class="card" id="card-sensors"> 
+  <h3>Sensors</h3> 
+  <p>Temp · Humidity · PIR · Gas · Dust</p> 
+  <p>All online</p> 
+</a> 
+
+<!-- MAINTENANCE --> 
+<a href="maintenance.html" class="card" id="card-maintenance" style="grid-column: span 5; overflow-x:auto;">
+  <h3>AutoMaid Maintenance</h3> 
+  <p>System health: 95%</p> 
+  <p>Next service: 28 days</p> 
+</a> 
+
+<!-- HEATMAP -->
+<a href="heatmap.html" class="card" id="card-heatmap" style="grid-column: span 5; height: 400px; overflow-x:auto;">
+  <h3>Cleanliness Heatmap</h3>
+  <div id="heatmap-container" style="display:flex; gap:12px; align-items:flex-start; padding:4px;"></div>
+  <p>Room-wise cleanliness distribution</p>
+</a>
+
+</section>
+
+<script>
+const dashboard = document.querySelector('.dashboard');
+let draggedCard = null;
+let placeholder = null;
+let offsetY = 0;
+
+// Restore card order from localStorage
+const savedOrder = JSON.parse(localStorage.getItem('cardOrder'));
+if (savedOrder) {
+  savedOrder.forEach(id => {
+    const card = document.getElementById(id);
+    if (card) dashboard.appendChild(card);
+  });
+}
+
+// Helper to create placeholder
+function createPlaceholder(card) {
+  const ph = document.createElement('div');
+  ph.className = 'card placeholder';
+  ph.style.height = `${card.offsetHeight}px`;
+  ph.style.width = `${card.offsetWidth}px`;
+  return ph;
+}
+
+// Save order to localStorage
+function saveOrder() {
+  const order = [...dashboard.querySelectorAll('.card')].map(c => c.id);
+  localStorage.setItem('cardOrder', JSON.stringify(order));
+}
+
+// =================== DESKTOP DRAG ===================
+dashboard.querySelectorAll('.card').forEach((card, index) => {
+  if (!card.id) card.id = `card-${index}`;
+  card.setAttribute('draggable', true);
+
+  card.addEventListener('dragstart', () => {
+    draggedCard = card;
+    card.classList.add('dragging');
+    placeholder = createPlaceholder(card);
+  });
+
+  card.addEventListener('dragend', () => {
+    if (draggedCard && placeholder) {
+      draggedCard.classList.remove('dragging');
+      dashboard.insertBefore(draggedCard, placeholder);
+      placeholder.remove();
+      placeholder = null;
+      draggedCard = null;
+      saveOrder();
+    }
+  });
+});
+
+dashboard.addEventListener('dragover', e => {
+  e.preventDefault();
+  if (!draggedCard) return;
+  const after = getDragAfterElement(dashboard, e.clientY);
+  if (!placeholder) placeholder = createPlaceholder(draggedCard);
+
+  if (after == null) dashboard.appendChild(placeholder);
+  else dashboard.insertBefore(placeholder, after);
+});
+
+// =================== MOBILE TOUCH ===================
+dashboard.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('touchstart', e => {
+    draggedCard = card;
+    card.classList.add('dragging');
+    placeholder = createPlaceholder(card);
+
+    const touch = e.touches[0];
+    offsetY = touch.clientY - card.getBoundingClientRect().top;
+  });
+
+  card.addEventListener('touchmove', e => {
+    if (!draggedCard) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    draggedCard.style.position = 'absolute';
+    draggedCard.style.top = `${touch.clientY - offsetY + window.scrollY}px`;
+    draggedCard.style.left = `${draggedCard.getBoundingClientRect().left}px`;
+
+    const after = getDragAfterElement(dashboard, touch.clientY);
+    if (!placeholder) placeholder = createPlaceholder(draggedCard);
+    if (after == null) dashboard.appendChild(placeholder);
+    else dashboard.insertBefore(placeholder, after);
+  });
+
+  card.addEventListener('touchend', e => {
+    if (!draggedCard || !placeholder) return;
+    draggedCard.style.position = '';
+    draggedCard.style.top = '';
+    draggedCard.style.left = '';
+    dashboard.insertBefore(draggedCard, placeholder);
+    placeholder.remove();
+    placeholder = null;
+    draggedCard.classList.remove('dragging');
+    draggedCard = null;
+    saveOrder();
+  });
+});
+
+// =================== HELPER FUNCTION ===================
+function getDragAfterElement(container, y) {
+  const draggableElements = [...container.querySelectorAll('.card:not(.dragging):not(.placeholder)')];
+
+  return draggableElements.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) return { offset, element: child };
+    else return closest;
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+</script>
+
+<script>
+const roomData = [
+  { name: "Living Room", cleanliness: 88, rows: 24, cols: 32 },
+  { name: "Bedroom",     cleanliness: 75, rows: 20, cols: 24 },
+  { name: "Kitchen",     cleanliness: 63, rows: 14, cols: 20 },
+  { name: "Bathroom",    cleanliness: 82, rows: 12, cols: 10 },
+  { name: "Study Room",  cleanliness: 92, rows: 18, cols: 18 },
+  { name: "Sauna",       cleanliness: 70, rows: 10, cols: 14 } // <-- Sauna added
+];
+
+const container = document.getElementById('heatmap-container');
+
+roomData.forEach(room => {
+  // Room container
+  const colDiv = document.createElement('div');
+  colDiv.style.display = 'flex';
+  colDiv.style.flexDirection = 'column';
+  colDiv.style.alignItems = 'center';
+  colDiv.style.gap = '4px';
+  colDiv.style.marginRight = '80px';
+
+  // Room label
+  const label = document.createElement('span');
+  label.style.fontSize = '20px';
+  label.innerText = room.name;
+  colDiv.appendChild(label);
+
+  // Room grid
+  const heatmap = document.createElement('div');
+  heatmap.style.display = 'grid';
+  heatmap.style.gridTemplateRows = `repeat(${room.rows}, 8px)`;
+  heatmap.style.gridTemplateColumns = `repeat(${room.cols}, 8px)`;
+  heatmap.style.gridGap = '1px';
+
+  for (let i = 0; i < room.rows * room.cols; i++) {
+    const cell = document.createElement('div');
+    cell.style.width = '8px';
+    cell.style.height = '8px';
+    cell.style.borderRadius = '1px';
+
+    const rand = Math.random() * 100;
+    if (rand <= room.cleanliness * 0.25) cell.style.background = 'red';
+    else if (rand <= room.cleanliness * 0.5) cell.style.background = 'orange';
+    else if (rand <= room.cleanliness * 0.75) cell.style.background = 'yellow';
+    else cell.style.background = 'green';
+
+    heatmap.appendChild(cell);
+  }
+
+  colDiv.appendChild(heatmap);
+  container.appendChild(colDiv);
+});
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+const tooltip = document.getElementById('tooltip');
+
+// Tooltip text for each card
+const tooltipTexts = {
+  "card-impact": "Time Saved: \nCurrent Month: 26.4 hours\nNext Month: 38 hours predicted",
+  "card-cleanliness": "Living Room: Last cleaned: 2 days ago\n Bedroom: Last cleaned: 4 days ago\n Kitchen: Last cleaned: 1 day ago\n Bathroom: Last cleaned: 2 days ago\n Study Room: Last cleaned: 2 days ago\n Sauna: Last cleaned: Today",
+  "card-urgency": "Overall Cleaning Urgency: 56%\nLiving Room: 65%\n Kitchen: 80%\nBathroom: 40%\n Bedroom: 50%\nStudy Room: 30%\nSauna: 70%",
+  "card-schedule": "Wed · Jan 21, 2026\nRoom: Kitchen\nDevice: Air Filter\nScheduled Time: 8:00 AM\nWed · Jan 21, 2026\nRoom: Bathroom\nDevice: Vacuum\nScheduled Time: 11:30 AM",
+  "card-temperature": "Indoor: 23.1°C\nOutside: −2.4°C\nAverage Indoor Temp 21°C\nAverage Outdoor Temp −4°C\nForecast Peak 0°C",
+  "card-humidity": "Past 30 days\nAverage Indoor Humidity 55%\nAverage Outdoor Humidity 78%\nForecast Peak 80%",
+  "card-dust": "Past 30 days\nAverage Dust 14 µg/m³\nHighest Dust Level 28 µg/m³",
+  "card-air": "Past 30 days\nAverage Dust 14 µg/m³\nAverage Gas: NormalOverall \nAQ Score 78%",
+  "card-gas": "Past 30 days\nAverage Gas Level 22%\nPeak Level 54%",
+  "card-energy": "Energy Efficiency: +18%\nSaved vs last month",
+  "card-water": "Water Saved: +12%\nOptimized cleaning routines",
+  "card-wellbeing": "Factors\nAir, Noise, Light & Routine",
+  "card-alerts": "Resolved Alerts: 105\nFilter replacement soon",
+  "card-devices": "Devices: Vacuum · Mop · Air Filter\nStatus: Healthy",
+  "card-sensors": "Sensors: Temp · Humidity · PIR · Gas · Dust\nAll online",
+  "card-maintenance": "System health: 95%\nLast Service: 2025-12-20\nNext service in 28 days",
+  "card-heatmap": "Room-wise cleanliness heatmap\nClick   for details"
+};
+
+// Function to move tooltip near cursor
+function moveTooltip(e) {
+  const x = e.clientX + 12;
+  const y = e.clientY + 12;
+  tooltip.style.left = x + 'px';
+  tooltip.style.top = y + 'px';
+}
+
+// Attach tooltip events
+document.querySelectorAll('.card').forEach(card => {
+  const id = card.id;
+  const text = tooltipTexts[id] || "Info not available";
+
+  // Desktop
+  card.addEventListener('mouseenter', e => {
+    tooltip.textContent = text;
+    tooltip.style.opacity = 1;
+    moveTooltip(e);
+  });
+  card.addEventListener('mousemove', e => moveTooltip(e));
+  card.addEventListener('mouseleave', () => tooltip.style.opacity = 0);
+
+  // Mobile
+  card.addEventListener('touchstart', e => {
+    e.preventDefault();
+    tooltip.textContent = text;
+    tooltip.style.opacity = 1;
+    moveTooltip(e.touches[0]);
+  });
+  card.addEventListener('touchmove', e => {
+    e.preventDefault();
+    moveTooltip(e.touches[0]);
+  });
+  card.addEventListener('touchend', () => {
+    tooltip.style.opacity = 0;
+  });
+});
+
+});
+</script>
+
+
+</section> 
+<div class="note"> 
+Demo UI · Simulated data · AutoMaid concept prototype 
+</div> 
+
+<div id="tooltip" style="
+  position: fixed;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 1000;
+  white-space: pre-line; /* respects \n for line breaks */
+"></div>
+
+
+</body> 
+</html>

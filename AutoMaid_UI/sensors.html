@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AutoMaid Sensors – Smart Home</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+header h1 { margin: 0; font-size: 22px; }
+header img { height: 48px; }
+
+section { padding: 28px; }
+
+h2 { margin-bottom: 16px; }
+
+/* SENSOR GRID */
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card p { margin: 2px 0; font-size: 13px; color: var(--text-muted); }
+.card .big { font-size: 20px; font-weight: 700; margin-top: 4px; }
+
+.chart-container {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AutoMaid Sensors</h1>
+  <img src="logo.png" alt="AutoMaid Logo">
+</header>
+
+<section>
+<h2>Sensor Status Overview</h2>
+<div class="sensor-grid" id="sensorGrid">
+  <!-- Sensor cards will go here -->
+</div>
+
+<h2>Sensor Type Distribution</h2>
+<div class="chart-container">
+  <canvas id="sensorChart"></canvas>
+</div>
+</section>
+
+<script>
+// Realistic sensors, grouped by room
+const sensors = [
+  // Bedroom
+  {room:"Bedroom", name:"Temp Sensor", type:"Temperature", last:"21.3°C", status:"Online"},
+  {room:"Bedroom", name:"Humidity Sensor", type:"Humidity", last:"45%", status:"Online"},
+  {room:"Bedroom", name:"PIR Motion Sensor", type:"Motion", last:"No Motion", status:"Online"},
+  {room:"Bedroom", name:"CO2 Sensor", type:"Gas", last:"420 ppm", status:"Online"},
+
+  // Living Room
+  {room:"Living Room", name:"Temp Sensor", type:"Temperature", last:"22.5°C", status:"Online"},
+  {room:"Living Room", name:"Humidity Sensor", type:"Humidity", last:"50%", status:"Online"},
+  {room:"Living Room", name:"Dust Sensor", type:"Dust", last:"15 µg/m³", status:"Online"},
+  {room:"Living Room", name:"TVOC Sensor", type:"Gas", last:"0.35 mg/m³", status:"Online"},
+  {room:"Living Room", name:"PIR Motion Sensor", type:"Motion", last:"No Motion", status:"Online"},
+
+  // Kitchen
+  {room:"Kitchen", name:"Temp Sensor", type:"Temperature", last:"24.8°C", status:"Online"},
+  {room:"Kitchen", name:"Humidity Sensor", type:"Humidity", last:"55%", status:"Online"},
+  {room:"Kitchen", name:"CO Sensor", type:"Gas", last:"3 ppm", status:"Online"},
+  {room:"Kitchen", name:"Smoke Sensor", type:"Smoke", last:"Normal", status:"Online"},
+  {room:"Kitchen", name:"PIR Motion Sensor", type:"Motion", last:"No Motion", status:"Online"},
+
+  // Bathroom
+  {room:"Bathroom", name:"Temp Sensor", type:"Temperature", last:"23.1°C", status:"Online"},
+  {room:"Bathroom", name:"Humidity Sensor", type:"Humidity", last:"60%", status:"Online"},
+  {room:"Bathroom", name:"VOC Sensor", type:"Gas", last:"0.2 mg/m³", status:"Online"},
+  {room:"Bathroom", name:"Water Leak Sensor", type:"Leak", last:"Dry", status:"Online"},
+
+  // Study Room
+  {room:"Study Room", name:"Temp Sensor", type:"Temperature", last:"22.0°C", status:"Online"},
+  {room:"Study Room", name:"Humidity Sensor", type:"Humidity", last:"48%", status:"Online"},
+  {room:"Study Room", name:"CO2 Sensor", type:"Gas", last:"430 ppm", status:"Online"},
+  {room:"Study Room", name:"Motion Sensor", type:"Motion", last:"No Motion", status:"Online"},
+
+// Sauna
+{room:"Sauna", name:"Temp Sensor", type:"Temperature", last:"70°C", status:"Online"},
+{room:"Sauna", name:"Humidity Sensor", type:"Humidity", last:"45%", status:"Online"},
+{room:"Sauna", name:"CO2 Sensor", type:"Gas", last:"Low", status:"Online"},
+{room:"Sauna", name:"Motion Sensor", type:"Motion", last:"No Motion", status:"Online"},
+
+];
+
+// Render sensor cards
+const sensorGrid = document.getElementById('sensorGrid');
+sensors.forEach(sensor=>{
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <h3>${sensor.name}</h3>
+    <p><strong>Room:</strong> ${sensor.room}</p>
+    <p><strong>Type:</strong> ${sensor.type}</p>
+    <p><strong>Last Reading:</strong> ${sensor.last}</p>
+    <p><strong>Status:</strong> ${sensor.status}</p>
+  `;
+  sensorGrid.appendChild(card);
+});
+
+// Prepare chart: count of each sensor type
+const typeCounts = {};
+sensors.forEach(s => { typeCounts[s.type] = (typeCounts[s.type] || 0) + 1; });
+
+const ctx = document.getElementById('sensorChart').getContext('2d');
+new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    labels: Object.keys(typeCounts),
+    datasets: [{
+      label: 'Sensor Count',
+      data: Object.values(typeCounts),
+      backgroundColor: [
+        'rgba(20,184,166,0.7)',
+        'rgba(74,222,128,0.7)',
+        'rgba(34,197,94,0.7)',
+        'rgba(16,163,74,0.7)',
+        'rgba(6,95,70,0.7)',
+        'rgba(14,116,144,0.7)'
+      ],
+    }]
+  },
+  options: {
+    responsive:true,
+    plugins:{ legend:{ position:'top' } }
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>AutoMaid – Cleanliness Dashboard</title>
+
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+/* HEADER */
+header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+header img { height: 48px; }
+header h1 { font-size: 24px; margin: 0; }
+header span { font-size: 14px; opacity: 0.9; }
+
+/* GRID */
+.dashboard {
+  padding: 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card:hover { transform: translateY(-4px); }
+
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card p { margin: 0; font-size: 13px; color: var(--text-muted); }
+
+/* PERCENT BAR */
+.bar { margin-top: 10px; height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
+.bar > div { height: 100%; background: linear-gradient(90deg, var(--eco), var(--teal-soft)); }
+
+/* BIG NUMBER */
+.big { font-size: 28px; font-weight: 700; margin-top: 8px; }
+
+/* FOOTER NOTE */
+.note { padding: 20px 28px; font-size: 12px; color: var(--text-muted); }
+
+/* BACK LINK */
+.back {
+  display: inline-block;
+  margin: 20px 28px 0 28px;
+  text-decoration: none;
+  color: var(--teal);
+  font-weight: 600;
+}
+
+.back:hover { text-decoration: underline; }
+</style>
+</head>
+
+<body>
+
+<a class="back" href="index.html">← Back to Dashboard</a>
+
+<header>
+  <img src="logo.png" alt="AutoMaid Logo">
+  <div>
+    <h1>Cleanliness Status</h1>
+    <span>Room-wise overview</span>
+  </div>
+</header>
+
+<section class="dashboard">
+
+  <!-- Living Room -->
+  <a href="living-room.html" class="card">
+    <h3>Living Room</h3>
+    <div class="big">88%</div>
+    <div class="bar"><div style="width:88%"></div></div>
+    <p>Last cleaned: 2 days ago</p>
+    <p>Dust level: 15 µg/m³</p>
+    <p>Cleaning urgency: Low</p>
+  </a>
+
+  <!-- Bedroom -->
+  <a href="bedroom.html" class="card">
+    <h3>Bedroom</h3>
+    <div class="big">75%</div>
+    <div class="bar"><div style="width:75%"></div></div>
+    <p>Last cleaned: 4 days ago</p>
+    <p>Dust level: 25 µg/m³</p>
+    <p>Cleaning urgency: Medium</p>
+  </a>
+
+  <!-- Kitchen -->
+  <a href="kitchen.html" class="card">
+    <h3>Kitchen</h3>
+    <div class="big">63%</div>
+    <div class="bar"><div style="width:63%"></div></div>
+    <p>Last cleaned: 1 day ago</p>
+    <p>Dust level: 30 µg/m³</p>
+    <p>Cleaning urgency: High</p>
+  </a>
+
+  <!-- Bathroom -->
+  <a href="bathroom.html" class="card">
+    <h3>Bathroom</h3>
+    <div class="big">82%</div>
+    <div class="bar"><div style="width:82%"></div></div>
+    <p>Last cleaned: 2 days ago</p>
+    <p>Dust level: 12 µg/m³</p>
+    <p>Cleaning urgency: Low</p>
+  </a>
+
+  <!-- Study Room -->
+  <a href="study-room.html" class="card">
+    <h3>Study Room</h3>
+    <div class="big">92%</div>
+    <div class="bar"><div style="width:92%"></div></div>
+    <p>Last cleaned: 2 days ago</p>
+    <p>Dust level: 9 µg/m³</p>
+    <p>Cleaning urgency: High</p>
+  </a>
+
+  <!-- Sauna -->
+  <a href="sauna.html" class="card">
+    <h3>Sauna</h3>
+    <div class="big">70%</div>
+    <div class="bar"><div style="width:70%"></div></div>
+    <p>Last cleaned: Today</p>
+    <p>Dust level: 8 µg/m³</p>
+    <p>Cleaning urgency: Medium</p>
+  </a>
+
+</section>
+
+<div class="note">
+Demo UI · Simulated data · AutoMaid concept prototype
+</div>
+
+</body>
+</html>

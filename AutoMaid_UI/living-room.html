@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AutoMaid · Living Room Summary</title>
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+header {
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+h1 {
+  margin: 0;
+}
+
+section {
+  padding: 28px;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .columns { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .columns { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.12);
+}
+
+.card h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.card div {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.card div span.label {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.card div span.value {
+  float: right;
+  color: var(--text-muted);
+}
+</style>
+</head>
+
+<body>
+<header>
+  <h1>AutoMaid · Living Room Summary</h1>
+</header>
+
+<section>
+  <div class="columns">
+    <!-- Last 24 Hours -->
+    <div class="card">
+      <h2>Last 24 Hours</h2>
+      <div><span class="label">Average Dust:</span> <span class="value">15 µg/m³</span></div>
+      <div><span class="label">Air Quality:</span> <span class="value">Good</span></div>
+      <div><span class="label">Gas:</span> <span class="value">Normal</span></div>
+      <div><span class="label">Temperature:</span> <span class="value">23°C</span></div>
+      <div><span class="label">Humidity:</span> <span class="value">45%</span></div>
+      <div><span class="label">Times Cleaned:</span> <span class="value">1</span></div>
+      <div><span class="label">Device Run Time:</span> <span class="value">30m</span></div>
+      <div><span class="label">Time Reclaimed:</span> <span class="value">15m</span></div>
+    </div>
+
+    <!-- Last 1 Month -->
+    <div class="card">
+      <h2>Last 1 Month</h2>
+      <div><span class="label">Average Dust:</span> <span class="value">16 µg/m³</span></div>
+      <div><span class="label">Air Quality:</span> <span class="value">Good</span></div>
+      <div><span class="label">Gas:</span> <span class="value">Normal</span></div>
+      <div><span class="label">Temperature:</span> <span class="value">23°C</span></div>
+      <div><span class="label">Humidity:</span> <span class="value">45%</span></div>
+      <div><span class="label">Times Cleaned:</span> <span class="value">25</span></div>
+      <div><span class="label">Device Run Time:</span> <span class="value">12h</span></div>
+      <div><span class="label">Time Reclaimed:</span> <span class="value">4h 30m</span></div>
+    </div>
+
+    <!-- Last 1 Year -->
+    <div class="card">
+      <h2>Last 1 Year</h2>
+      <div><span class="label">Average Dust:</span> <span class="value">17 µg/m³</span></div>
+      <div><span class="label">Air Quality:</span> <span class="value">Good</span></div>
+      <div><span class="label">Gas:</span> <span class="value">Normal</span></div>
+      <div><span class="label">Temperature:</span> <span class="value">23°C</span></div>
+      <div><span class="label">Humidity:</span> <span class="value">45%</span></div>
+      <div><span class="label">Times Cleaned:</span> <span class="value">300</span></div>
+      <div><span class="label">Device Run Time:</span> <span class="value">150h</span></div>
+      <div><span class="label">Time Reclaimed:</span> <span class="value">60h</span></div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

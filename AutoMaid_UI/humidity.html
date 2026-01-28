@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Humidity – AutoMaid</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+header h1 { margin: 0; font-size: 22px; }
+header img { height: 48px; }
+
+section { padding: 28px; }
+
+/* SUMMARY CARDS */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: var(--card);
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card .big { font-size: 28px; font-weight: 700; margin-top: 4px; }
+.card p { font-size: 13px; color: var(--text-muted); }
+
+/* CHART GRID */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.chart-container {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Indoor & Outdoor Humidity</h1>
+  <img src="logo.png" alt="AutoMaid Logo">
+</header>
+
+<section>
+
+  <!-- SUMMARY CARDS -->
+  <div class="cards">
+    <div class="card">
+      <h3>Average Indoor Humidity</h3>
+      <div class="big">55%</div>
+      <p>Dec 20 2025 – Jan 20 2026</p>
+    </div>
+    <div class="card">
+      <h3>Average Outdoor Humidity</h3>
+      <div class="big">78%</div>
+      <p>Dec 20 2025 – Jan 20 2026</p>
+    </div>
+    <div class="card">
+      <h3>Forecast Peak</h3>
+      <div class="big">80%</div>
+      <p>Jan 21 2026 – Feb 4 2026</p>
+    </div>
+  </div>
+
+  <!-- CHART GRID: past vs forecast -->
+  <div class="chart-grid">
+    <div class="chart-container">
+      <canvas id="pastHumidityChart" height="120"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="forecastHumidityChart" height="120"></canvas>
+    </div>
+  </div>
+<!-- ROOM-WISE HUMIDITY CARDS -->
+<div class="cards">
+  <div class="card">
+    <h3>Living Room</h3>
+    <div class="big">45%</div>
+    <p>Winter: 50% · Spring: 48% · Summer: 40% · Autumn: 42%</p>
+  </div>
+
+  <div class="card">
+    <h3>Bedroom</h3>
+    <div class="big">50%</div>
+    <p>Winter: 55% · Spring: 52% · Summer: 45% · Autumn: 48%</p>
+  </div>
+
+  <div class="card">
+    <h3>Kitchen</h3>
+    <div class="big">55%</div>
+    <p>Winter: 60% · Spring: 58% · Summer: 50% · Autumn: 53%</p>
+  </div>
+
+  <div class="card">
+    <h3>Bathroom</h3>
+    <div class="big">60%</div>
+    <p>Winter: 65% · Spring: 62% · Summer: 55% · Autumn: 58%</p>
+  </div>
+
+  <div class="card">
+    <h3>Study Room</h3>
+    <div class="big">48%</div>
+    <p>Winter: 52% · Spring: 50% · Summer: 45% · Autumn: 47%</p>
+  </div>
+
+  <div class="card">
+    <h3>Sauna</h3>
+    <div class="big">45%</div>
+    <p>Winter: 48% · Spring: 46% · Summer: 40% · Autumn: 42%</p>
+  </div>
+</div>
+
+</section>
+
+<script>
+// Build date arrays
+function getDateArray(start, end) {
+  const arr = [];
+  let dt = new Date(start);
+  while (dt <= end) {
+    arr.push(new Date(dt));
+    dt.setDate(dt.getDate() + 1);
+  }
+  return arr;
+}
+
+// Past 30 days: Dec 20 2025 – Jan 20 2026
+const pastDates = getDateArray(new Date("2025-12-20"), new Date("2026-01-20"));
+const indoorHumidity = pastDates.map(() => 50 + Math.random() * 10);   // 50–60%
+const outdoorHumidity = pastDates.map(() => 70 + Math.random() * 10);  // 70–80%
+
+// Forecast: Jan 21 2026 – Feb 4 2026
+const forecastDates = getDateArray(new Date("2026-01-21"), new Date("2026-02-04"));
+const forecastOutdoor = forecastDates.map(() => 65 + Math.random() * 15); // 65–80%
+
+const formatDate = d => d.toISOString().split("T")[0];
+
+// Past chart
+new Chart(document.getElementById('pastHumidityChart'), {
+  type: 'line',
+  data: {
+    labels: pastDates.map(formatDate),
+    datasets: [
+      {
+        label: 'Indoor (%)',
+        data: indoorHumidity,
+        borderColor: 'rgba(74,222,128,1)',
+        backgroundColor: 'rgba(74,222,128,0.3)',
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: 'Outdoor (%)',
+        data: outdoorHumidity,
+        borderColor: 'rgba(20,184,166,1)',
+        backgroundColor: 'rgba(20,184,166,0.3)',
+        fill: true,
+        tension: 0.3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { min: 0, max: 100 },
+      x: { ticks: { maxTicksLimit: 12 } }
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: 'Indoor vs Outdoor Humidity (Dec 20 2025 – Jan 20 2026)'
+      }
+    }
+  }
+});
+
+// Forecast chart
+new Chart(document.getElementById('forecastHumidityChart'), {
+  type: 'line',
+  data: {
+    labels: forecastDates.map(formatDate),
+    datasets: [
+      {
+        label: 'Outdoor Forecast (%)',
+        data: forecastOutdoor,
+        borderColor: 'rgba(20,184,166,1)',
+        backgroundColor: 'rgba(20,184,166,0.3)',
+        fill: true,
+        tension: 0.3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { min: 0, max: 100 },
+      x: { ticks: { maxTicksLimit: 12 } }
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: 'Simulated Outdoor Humidity Forecast (Jan 21 2026 – Feb 4 2026)'
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

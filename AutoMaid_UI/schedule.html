@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Next 15 Days Cleaning Schedule – AutoMaid</title>
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+header h1 { margin: 0; font-size: 22px; }
+header img { height: 48px; }
+
+section { padding: 28px; }
+
+/* GRID CARDS */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: var(--card);
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card p { margin: 4px 0; font-size: 13px; color: var(--text-muted); }
+.card .big { font-size: 20px; font-weight: 700; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Next 15 Days Cleaning Schedule</h1>
+  <img src="logo.png" alt="AutoMaid Logo">
+</header>
+
+<section>
+
+<div class="schedule-grid" id="scheduleContainer">
+  <!-- Schedule cards will be injected here by JavaScript -->
+</div>
+
+</section>
+
+<script>
+// Rooms and devices
+const rooms = ["Living Room", "Kitchen", "Bedroom 1", "Bedroom 2", "Bathroom"];
+const devices = ["Vacuum", "Mop", "Air Filter"];
+
+// Predictive schedule start date
+const startDate = new Date("2026-01-21");
+
+// Generate schedule for 15 days, 2-3 rooms per day
+const scheduleContainer = document.getElementById('scheduleContainer');
+for(let i=0; i<15; i++){
+  const date = new Date(startDate);
+  date.setDate(startDate.getDate() + i);
+  const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+  const fullDate = date.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
+
+  // Predict 2-3 rooms per day
+  const roomsPerDay = Math.floor(Math.random()*2)+2; // 2 or 3 rooms
+  let usedRooms = [];
+  for(let j=0;j<roomsPerDay;j++){
+    // pick unique room
+    let room;
+    do {
+      room = rooms[Math.floor(Math.random()*rooms.length)];
+    } while(usedRooms.includes(room));
+    usedRooms.push(room);
+
+    // pick random device
+    const device = devices[Math.floor(Math.random()*devices.length)];
+
+    // generate realistic morning/evening schedule
+    const hour = Math.floor(Math.random()*4) + 8; // 8-11 AM
+    const minute = Math.random()<0.5?"00":"30";
+    const time = `${hour}:${minute} AM`;
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <h3>${dayName} · ${fullDate}</h3>
+      <p><strong>Room:</strong> ${room}</p>
+      <p><strong>Device:</strong> ${device}</p>
+      <p><strong>Scheduled Time:</strong> ${time}</p>
+    `;
+    scheduleContainer.appendChild(card);
+  }
+}
+</script>
+
+</body>
+</html>

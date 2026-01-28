@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cleaning Devices – AutoMaid</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+header h1 { margin: 0; font-size: 22px; }
+header img { height: 48px; }
+
+section { padding: 28px; }
+
+/* DEVICE CARDS GRID */
+.device-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card p { margin: 2px 0; font-size: 13px; color: var(--text-muted); }
+.card .big { font-size: 20px; font-weight: 700; margin-top: 4px; }
+
+.chart-container {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Cleaning Devices</h1>
+  <img src="logo.png" alt="AutoMaid Logo">
+</header>
+
+<section>
+<h2>Devices Overview</h2>
+<div class="device-grid" id="deviceGrid">
+  <!-- Device cards will be inserted here -->
+</div>
+
+<h2>Device Health & Charge</h2>
+<div class="chart-container">
+  <canvas id="deviceChart"></canvas>
+</div>
+</section>
+
+<script>
+// Realistic devices
+const devices = [
+  // Central vacuum
+  {name:"Central Vacuum", brand:"Beam", model:"Beam Classic 3000", health:95, charge:null, type:"Vacuum"},
+  
+  // Mops
+  {name:"Mop Robot 1", brand:"iRobot", model:"Braava Jet 240", health:90, charge:100, type:"Mop Robot"},
+  {name:"Mop Robot 2", brand:"iRobot", model:"Braava Jet 250", health:85, charge:80, type:"Mop Robot"},
+  {name:"Mop Robot 3", brand:"Ecovacs", model:"Deebot M88", health:88, charge:65, type:"Mop Robot"},
+
+  // Vacuum robots
+  {name:"Vacuum Robot A", brand:"Roborock", model:"S7 MaxV", health:92, charge:90, type:"Vacuum Robot"},
+  {name:"Vacuum Robot B", brand:"Neato", model:"D8", health:87, charge:70, type:"Vacuum Robot"},
+  {name:"Vacuum Robot C", brand:"Ecovacs", model:"Deebot T10", health:80, charge:55, type:"Vacuum Robot"},
+  {name:"Vacuum Robot D", brand:"iRobot", model:"Roomba i3+", health:85, charge:60, type:"Vacuum Robot"},
+
+  // Air Purifiers
+  {name:"Air Purifier 1", brand:"Dyson", model:"Pure Cool TP04", health:92, charge:null, type:"Air Purifier"},
+  {name:"Air Purifier 2", brand:"Philips", model:"AC2887/10", health:87, charge:null, type:"Air Purifier"},
+  {name:"Air Purifier 3", brand:"Xiaomi", model:"Mi Air Purifier 4 Lite", health:80, charge:null, type:"Air Purifier"},
+
+// Sauna devices
+{ name: "Sauna Temp Controller", brand: "Harvia", model: "C105", health: 95, charge: null, type: "Temperature Controller" },
+{ name: "Sauna Humidity Sensor", brand: "Tylö", model: "H200", health: 90, charge: null, type: "Humidity Sensor" },
+{ name: "Sauna Fan", brand: "Harvia", model: "VentPro 300", health: 88, charge: 100, type: "Fan" },
+{ name: "Sauna Lighting", brand: "Philips", model: "Hue Strip Sauna", health: 92, charge: 80, type: "Lighting" },
+
+];
+
+// Render device cards
+const deviceGrid = document.getElementById('deviceGrid');
+devices.forEach(dev=>{
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <h3>${dev.name}</h3>
+    <p><strong>Brand:</strong> ${dev.brand}</p>
+    <p><strong>Model:</strong> ${dev.model}</p>
+    <p><strong>Type:</strong> ${dev.type}</p>
+    <p><strong>Health:</strong> ${dev.health}%</p>
+    ${dev.charge !== null ? `<p><strong>Charge:</strong> ${dev.charge}%</p>` : ''}
+  `;
+  deviceGrid.appendChild(card);
+});
+
+// Chart showing device health and charge
+const ctx = document.getElementById('deviceChart').getContext('2d');
+const labels = devices.map(d=>d.name);
+const healthData = devices.map(d=>d.health);
+const chargeData = devices.map(d=>d.charge || 0);
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Health (%)',
+        data: healthData,
+        backgroundColor: 'rgba(74, 222, 128, 0.7)',
+        borderRadius: 8,
+      },
+      {
+        label: 'Charge (%)',
+        data: chargeData,
+        backgroundColor: 'rgba(20, 184, 166, 0.7)',
+        borderRadius: 8,
+      }
+    ]
+  },
+  options: {
+    responsive:true,
+    plugins: { legend: { position:'top' } },
+    scales: {
+      y: { beginAtZero: true, max: 100, title:{display:true,text:'%'}} 
+    }
+  }
+});
+</script>
+
+</body>
+</html>

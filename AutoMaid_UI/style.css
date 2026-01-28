@@ -1,0 +1,138 @@
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+/* -----------------------------
+   Global
+------------------------------*/
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+/* -----------------------------
+   Header
+------------------------------*/
+header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: #ffffff;
+}
+
+header img {
+  height: 48px;
+}
+
+header h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+header span {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* -----------------------------
+   Dashboard Grid
+------------------------------*/
+.dashboard {
+  padding: 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* -----------------------------
+   Cards
+------------------------------*/
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.card p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* -----------------------------
+   Big Numbers
+------------------------------*/
+.big {
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+/* -----------------------------
+   Percentage Bar
+------------------------------*/
+.bar {
+  margin-top: 10px;
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--eco), var(--teal-soft));
+  border-radius: 999px;
+}
+
+/* -----------------------------
+   Heatmap
+------------------------------*/
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.cell {
+  height: 28px;
+  border-radius: 6px;
+}
+
+/* -----------------------------
+   Footer / Note
+------------------------------*/
+.note {
+  padding: 20px 28px;
+  font-size: 12px;
+  color: var(--text-muted);
+}

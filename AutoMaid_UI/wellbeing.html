@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AutoMaid – Wellbeing Dashboard</title>
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+* { box-sizing: border-box; font-family: "Segoe UI", system-ui, sans-serif; }
+body { margin:0; background:var(--bg); color:var(--text-dark); }
+
+/* HEADER */
+header { display:flex; align-items:center; gap:16px; padding:20px 28px; background: linear-gradient(135deg, var(--teal), var(--teal-soft)); color:white; }
+header img { height:48px; }
+header h1 { margin:0; font-size:24px; }
+header span { font-size:14px; opacity:0.9; }
+
+/* BACK LINK */
+.back { display:inline-block; margin: 20px 28px; text-decoration:none; color: var(--teal); font-weight:bold; }
+
+/* GRID CARDS */
+.dashboard { padding: 0 28px 28px 28px; display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.card { background:var(--card); border-radius:16px; padding:18px; box-shadow:0 12px 30px rgba(0,0,0,0.06); transition: transform 0.2s ease; cursor: default; }
+.card h3 { margin:0 0 6px; font-size:16px; }
+.card p { margin:0; font-size:13px; color:var(--text-muted); }
+.big { font-size:28px; font-weight:700; margin-top:8px; }
+.bar { margin-top:10px; height:10px; background:#e5e7eb; border-radius:999px; overflow:hidden; }
+.bar > div { height:100%; background: linear-gradient(90deg, var(--eco), var(--teal-soft)); }
+
+/* FEEDBACK BOX */
+.feedback { margin-top:12px; padding:12px; background:#e0f2f1; border-radius:12px; font-size:14px; }
+
+/* FOOTER */
+.note { padding:20px 28px; font-size:12px; color:var(--text-muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="logo.png" alt="AutoMaid Logo">
+  <div>
+    <h1>AutoMaid</h1>
+    <span>Wellbeing Dashboard</span>
+  </div>
+</header>
+
+<a href="index.html" class="back">← Back to Dashboard</a>
+
+<section class="dashboard">
+
+  <!-- OVERALL HAPPINESS -->
+  <div class="card">
+    <h3>Overall Comfort Level</h3>
+    <div class="big">81%</div>
+    <div class="bar"><div style="width:81%"></div></div>
+    <p>Overall wellbeing score compared to last month: +5%</p>
+  </div>
+
+  <!-- AIR -->
+  <div class="card">
+    <h3>Air Quality Comfort</h3>
+    <div class="big">76%</div>
+    <div class="bar"><div style="width:76%"></div></div>
+    <p>Temperature & humidity optimized</p>
+  </div>
+
+  <!-- NOISE -->
+  <div class="card">
+    <h3>Noise Level</h3>
+    <div class="big">68%</div>
+    <div class="bar"><div style="width:68%"></div></div>
+    <p>Quietness maintained in living areas</p>
+  </div>
+
+  <!-- LIGHT & ROUTINE -->
+  <div class="card">
+    <h3>Light & Routine</h3>
+    <div class="big">82%</div>
+    <div class="bar"><div style="width:82%"></div></div>
+    <p>Optimal light schedules followed</p>
+  </div>
+
+  <!-- SLEEP -->
+  <div class="card">
+    <h3>Sleep Quality</h3>
+    <div class="big">77%</div>
+    <div class="bar"><div style="width:77%"></div></div>
+    <p>Bedtime routines and environment optimized</p>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div class="card">
+    <h3>User Feedback</h3>
+    <div class="feedback">
+      "Feeling comfortable and productive at home. Air and light levels are good."
+      <br><strong>Satisfaction Level: 79%</strong>
+    </div>
+  </div>
+
+</section>
+
+<div class="note">
+Demo UI · Simulated data · AutoMaid concept prototype
+</div>
+
+</body>
+</html>

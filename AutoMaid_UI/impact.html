@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>AutoMaid Impact – Time Reclaimed</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+/* HEADER */
+header {
+  padding: 24px 32px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+header p {
+  margin: 4px 0 0;
+  opacity: 0.9;
+  font-size: 14px;
+}
+
+/* CONTENT */
+section {
+  padding: 32px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+.big {
+  font-size: 44px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.muted {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.chart-container {
+  margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Time Reclaimed by AutoMaid</h1>
+  <p>Measured impact of autonomous cleaning and intelligent scheduling</p>
+</header>
+
+<section>
+
+  <div class="card">
+    <div class="big">312 hours</div>
+    <div class="muted">
+      Total household cleaning time saved over the last 12 months.
+      Equivalent to nearly 8 full working weeks.
+    </div>
+
+    <div class="chart-container">
+      <canvas id="impactChart" height="120"></canvas>
+    </div>
+
+    <p class="muted" style="margin-top:18px;">
+      Next month’s value is a predictive estimate based on usage trends,
+      occupancy patterns, and device performance.
+    </p>
+  </div>
+
+</section>
+
+<script>
+const labels = [
+  "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+  "Aug", "Sep", "Oct", "Nov", "Dec", "Jan",
+  "Feb (Predicted)"
+];
+
+const hoursSaved = [
+  18, 20, 22, 24, 26, 25,
+  27, 28, 26, 29, 31, 36,
+  38
+];
+
+const barColors = labels.map((l, i) =>
+  i === labels.length - 1
+    ? "rgba(20,184,166,0.9)"   // prediction
+    : "rgba(74,222,128,0.75)" // historical
+);
+
+const ctx = document.getElementById("impactChart").getContext("2d");
+
+new Chart(ctx, {
+  type: "bar",
+  data: {
+    labels: labels,
+    datasets: [{
+      label: "Hours Saved",
+      data: hoursSaved,
+      backgroundColor: barColors,
+      borderRadius: 10
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => `${ctx.parsed.y} hours`
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: "Hours"
+        }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

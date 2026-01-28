@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>AutoMaid – Cleaning Urgency Dashboard</title>
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+/* HEADER */
+header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+header img { height: 48px; }
+header h1 { font-size: 24px; margin: 0; }
+header span { font-size: 14px; opacity: 0.9; }
+
+/* BACK LINK */
+.back {
+  margin: 20px 28px;
+  display: inline-block;
+  text-decoration: none;
+  color: var(--teal);
+  font-weight: bold;
+}
+
+/* GRID */
+.dashboard {
+  padding: 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card:hover { transform: translateY(-4px); }
+
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card p { margin: 0; font-size: 13px; color: var(--text-muted); }
+
+/* PERCENT BAR */
+.bar { margin-top: 10px; height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
+.bar > div { height: 100%; background: linear-gradient(90deg, var(--eco), var(--teal-soft)); }
+
+/* BIG NUMBER */
+.big { font-size: 28px; font-weight: 700; margin-top: 8px; }
+
+/* FOOTER NOTE */
+.note { padding: 20px 28px; font-size: 12px; color: var(--text-muted); }
+</style>
+</head>
+
+<body>
+
+<header>
+  <img src="logo.png" alt="AutoMaid Logo">
+  <div>
+    <h1>Cleaning Urgency</h1>
+    <span>Per-room & overall urgency overview</span>
+  </div>
+</header>
+
+<a href="index.html" class="back">← Back to Dashboard</a>
+
+<section class="dashboard">
+
+  <!-- Overall Urgency (not clickable) -->
+  <div class="card" style="grid-column: span 5;">
+    <h3>Overall Cleaning Urgency</h3>
+    <div class="big">56%</div>
+    <div class="bar"><div style="width:56%"></div></div>
+    <p>Average urgency across all rooms</p>
+  </div>
+
+  <!-- ROOM CARDS as clickable links -->
+  <a href="living-room.html" class="card">
+    <h3>Living Room</h3>
+    <div class="big">65%</div>
+    <div class="bar"><div style="width:65%"></div></div>
+    <p>Next recommended cleaning: Tomorrow 10:00 AM</p>
+  </a>
+
+  <a href="kitchen.html" class="card">
+    <h3>Kitchen</h3>
+    <div class="big">80%</div>
+    <div class="bar"><div style="width:80%"></div></div>
+    <p>Next recommended cleaning: Today 6:00 PM</p>
+  </a>
+
+  <a href="bathroom.html" class="card">
+    <h3>Bathroom</h3>
+    <div class="big">40%</div>
+    <div class="bar"><div style="width:40%"></div></div>
+    <p>Next recommended cleaning: In 3 days</p>
+  </a>
+
+  <a href="bedroom.html" class="card">
+    <h3>Bedroom</h3>
+    <div class="big">50%</div>
+    <div class="bar"><div style="width:50%"></div></div>
+    <p>Next recommended cleaning: Tomorrow 8:00 AM</p>
+  </a>
+
+  <a href="study-room.html" class="card">
+    <h3>Study Room</h3>
+    <div class="big">30%</div>
+    <div class="bar"><div style="width:30%"></div></div>
+    <p>Next recommended cleaning: In 5 days</p>
+  </a>
+
+  <a href="sauna.html" class="card">
+    <h3>Sauna</h3>
+    <div class="big">70%</div>
+    <div class="bar"><div style="width:70%"></div></div>
+    <p>Next recommended cleaning: Today 8:00 PM</p>
+  </a>
+
+</section>
+
+<div class="note">
+Demo UI · Simulated data · AutoMaid concept prototype
+</div>
+
+</body>
+</html>

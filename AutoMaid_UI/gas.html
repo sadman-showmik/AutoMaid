@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gas Presence – AutoMaid</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --teal: #0f766e;
+  --teal-soft: #14b8a6;
+  --eco: #4ade80;
+  --bg: #f4fafa;
+  --card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: white;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+header img {
+  height: 48px;
+}
+
+section {
+  padding: 28px;
+}
+
+/* SUMMARY CARDS */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: var(--card);
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.card h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.card .big {
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.card p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* CHART CONTAINER */
+.chart-container {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Gas Presence</h1>
+  <img src="logo.png" alt="AutoMaid Logo">
+</header>
+
+<section>
+
+  <!-- SUMMARY CARDS -->
+  <div class="cards">
+    <div class="card">
+      <h3>Average Gas Level</h3>
+      <div class="big">22%</div>
+      <p>Past 30 days</p>
+    </div>
+    <div class="card">
+      <h3>Peak Level</h3>
+      <div class="big">54%</div>
+      <p>Highest recorded day</p>
+    </div>
+    <div class="card">
+      <h3>Normal Days</h3>
+      <div class="big">24</div>
+      <p>Days within safe range</p>
+    </div>
+  </div>
+
+  <!-- BAR CHART -->
+  <div class="chart-container">
+    <canvas id="gasChart" height="120"></canvas>
+  </div>
+
+</section>
+
+<script>
+const ctx = document.getElementById('gasChart').getContext('2d');
+
+// Generate fake gas percentage data for 30 days
+const days = Array.from({length:30}, (_,i)=>`Day ${i+1}`);
+const gasLevels = Array.from({length:30}, ()=> Math.floor(Math.random() * 50 + 5)); // 5-55%
+
+const gasChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: days,
+    datasets: [
+      {
+        label: 'Gas Level (%)',
+        data: gasLevels,
+        backgroundColor: 'rgba(56, 189, 248, 0.7)',
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Gas Presence - Last 30 Days'
+      }
+    },
+    scales: {
+      y: { beginAtZero: true, max: 60 }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
