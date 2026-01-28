@@ -1,9 +1,13 @@
 # AutoMaid
 AutoMaid – Effortless and Self-Learning Cleaning Management System
 
-## AutoMaid Project website
+## AutoMaid Project
 
-Visit our website: [https://https://dazzled-value-099342.framer.app/](https://dazzled-value-099342.framer.app/)
+Visit our website: [https://dazzled-value-099342.framer.app/](https://dazzled-value-099342.framer.app/)
+
+User Interface Demo: [https://dazzled-value-099342.framer.app/](https://dazzled-value-099342.framer.app/)
+
+Demo Pitch Video: [Automaid: Open_Video](https://youtu.be/hOYoYzM-Z0E)
 
 ## Overview
 AutoMaid is an autonomous home cleaning management system that keeps your space clean without direct effort from the user. It learns household habits, predicts cleaning needs, and cleans floors, surfaces, and air when necessary. The system optimizes cleaning schedules based on residents’ routines, providing a hygienic and comfortable environment while saving natural resources.
@@ -62,6 +66,30 @@ AutoMaid can integrate with smart home systems for lighting, heating, and notifi
 This public repository is for demonstration purposes only. Proprietary code, ML models, hardware schematics, and business plans are stored in private submodules and are **not included** in this repo.
 
 ---
+
+## Repository Structure
+
+AutoMaid/
+├── AutoMaid_UI/                    # Frontend for monitoring & control
+├── Hardware_Code/                  
+│   └── pico_sensor_mqtt.py         # Pico W sensor data collection & MQTT publishing
+├── Networking_Code/
+│   ├── pico_mqtt_test.py           # Pico W Wi-Fi + MQTT connectivity test
+│   └── MQTT_JSON_Upload/
+│       ├── pico_init_sensors.py   # Pico W initialization & MQTT setup
+│       └── mqtt_json_logger.py    # PC/RPi JSON logger subscribing to MQTT topic
+├── demo/                            # Demo video & media via Git LFS
+├── docs-public/                     # Public documentation & media folder
+├── media/                           # Images & demo assets
+├── LICENSE                          # Public repository license
+├── README.md                         # This file
+└── .gitmodules/.gitattributes       # Submodules & Git LFS settings
+
+## Project Contact
+
+For questions, support, or collaboration inquiries, contact us at:  
+📧 automaid@europe.com
+
 
 ## License
 Copyright (c) 2025 B M Sadman Showmik, Regina Shakirova, Sagar Parajuli, Ashraf Hossain Khan  
