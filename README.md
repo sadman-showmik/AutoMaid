@@ -69,21 +69,36 @@ This public repository is for demonstration purposes only. Proprietary code, ML 
 
 ## Repository Structure
 
+The repository is organized into four functional areas: the user interface, sensor
+hardware, network communication, and public demonstration assets.
+
+```text
 AutoMaid/
-├── AutoMaid_UI/                    # Frontend for monitoring & control
-├── Hardware_Code/                  
-│   └── pico_sensor_mqtt.py         # Pico W sensor data collection & MQTT publishing
+├── AutoMaid_UI/                         # Frontend for monitoring and control
+├── Hardware_Code/
+│   └── pico_sensor_mqtt.py              # Pico W sensors and MQTT publishing
 ├── Networking_Code/
-│   ├── pico_mqtt_test.py           # Pico W Wi-Fi + MQTT connectivity test
+│   ├── pico_mqtt_test.py                # Pico W Wi-Fi and MQTT connectivity test
 │   └── MQTT_JSON_Upload/
-│       ├── pico_init_sensors.py   # Pico W initialization & MQTT setup
-│       └── mqtt_json_logger.py    # PC/RPi JSON logger subscribing to MQTT topic
-├── demo/                            # Demo video & media via Git LFS
-├── docs-public/                     # Public documentation & media folder
-├── media/                           # Images & demo assets
-├── LICENSE                          # Public repository license
-├── README.md                         # This file
-└── .gitmodules/.gitattributes       # Submodules & Git LFS settings
+│       ├── pico_init_sensors.py         # Sensor initialization and MQTT setup
+│       └── mqtt_json_logger.py          # PC/RPi MQTT subscriber and JSON logger
+├── demo/                                # Demo video and media via Git LFS
+├── docs-public/                         # Public documentation and media
+├── media/                               # Images and demo assets
+├── LICENSE                              # Public repository license
+├── README.md                            # Project overview and documentation
+└── .gitmodules / .gitattributes         # Submodules and Git LFS configuration
+```
+
+| Area | Contents |
+| :--- | :--- |
+| **Interface** | `AutoMaid_UI/` — monitoring and control frontend |
+| **Hardware** | `Hardware_Code/` — Pico W sensor collection |
+| **Networking** | `Networking_Code/` — Wi-Fi, MQTT, and JSON data flow |
+| **Public assets** | `demo/`, `docs-public/`, and `media/` — demonstrations and documentation |
+
+> **Note:** Proprietary code, ML models, hardware schematics, and business materials
+> remain in private submodules and are not included in this public repository.
 
 ## Project Contact
 
