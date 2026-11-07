@@ -5,7 +5,7 @@ AutoMaid – Effortless and Self-Learning Cleaning Management System
 
 Visit our website: [https://dazzled-value-099342.framer.app/](https://dazzled-value-099342.framer.app/)
 
-User Interface Demo: [https://dazzled-value-099342.framer.app/](https://dazzled-value-099342.framer.app/)
+User Interface Demo: [https://automaid.netlify.app/]((https://automaid.netlify.app/))
 
 Demo Pitch Video: [Automaid: Open_Video](https://youtu.be/hOYoYzM-Z0E)
 
